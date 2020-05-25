@@ -1,0 +1,12 @@
+#ifndef RULES_H
+#define RULES_H
+
+
+class Rules
+{
+public:
+    Rules();
+    int (*pointsPos)[24];
+};
+
+#endif // RULES_H

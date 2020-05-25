@@ -1,11 +1,11 @@
-#include "gamewindow.h"
-
+#include "factory.h"
 #include <QApplication>
+#include "factory.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    GameWindow w;
-    w.show();
+    Factory f;
+    f.build();
     return a.exec();
 }

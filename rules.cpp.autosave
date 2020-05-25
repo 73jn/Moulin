@@ -1,0 +1,7 @@
+#include "rules.h"
+
+Rules::Rules()
+{
+    pointsPos = new int[2][24];
+    *pointsPos = {{1,2},{1,2}}
+}
