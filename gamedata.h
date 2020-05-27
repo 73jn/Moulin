@@ -1,5 +1,6 @@
 #ifndef GAMEDATA_H
 #define GAMEDATA_H
+#include "rules.h"
 #include "board.h"
 #include "player.h"
 #include "observer.h"
@@ -13,6 +14,7 @@ public:
     void notifyAll();
     void placePawn(int pos);
     Board* pBoard;
+    Rules* pRules;
 private:
     Observer** observers;
     int obsCnt;

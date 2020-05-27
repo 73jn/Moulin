@@ -6,6 +6,7 @@ class Rules
 {
 public:
     Rules();
+    int pointTab[2][2];
 };
 
 #endif // RULES_H

@@ -22,10 +22,10 @@ void GameInput::setupUI()
     leMoveSource->selectAll();
     leMoveSource->setVisible(true);
 
-    leMoveSource = new QLineEdit("Coordonate Destination", this);
-    leMoveSource->setGeometry(10,90,300,20);
-    leMoveSource->selectAll();
-    leMoveSource->setVisible(true);
+    leMoveDest = new QLineEdit("Coordonate Destination", this);
+    leMoveDest->setGeometry(10,90,300,20);
+    leMoveDest->selectAll();
+    leMoveDest->setVisible(true);
 
     leEat = new QLineEdit("Coordonate Eat", this);
     leEat->setGeometry(10,130,300,20);

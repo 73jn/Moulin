@@ -9,7 +9,6 @@ class GameController
 public:
     GameController();
     void initRelations(GameData* d);
-    void onInput(QString data);
     void onMove(QString source, QString destination);
     void onEat(QString target);
     void onPlace(QString target);

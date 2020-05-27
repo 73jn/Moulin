@@ -11,7 +11,7 @@ public:
     int posY;
     Pawn* pPawn=nullptr;
     bool isEdge;
-    Point** hisNeighbour;
+    Point** hisNeighbour=nullptr;
 
     bool isEmpty();
     void setNeighbour(Point p1, Point p2, Point p3, Point p4);
