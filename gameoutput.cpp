@@ -3,25 +3,14 @@
 GameOutput::GameOutput(int x, int y, int width, int heigth, QString title)
  : View(x, y, width, heigth, title)
 {
-    /*
-    QPainter p(this);
-    painter = &p;
-    drawBoard(painter);
-    */
+
 
 }
 
 void GameOutput::paintEvent(QPaintEvent *event)
 {
     QPainter p(this);
-    for (int i = 0; i < pData->pBoard->vectPoint.size(); i++){
-        for (int j = 0; j < 4; j++){
-            if (pData->pRules->pointNeigh[i][j]>=0){
-                p.drawLine(pData->pRules->pointTab[i][0],pData->pRules->pointTab[i][1],pData->pRules->pointTab[pData->pRules->pointNeigh[i][j]][0],pData->pRules->pointTab[pData->pRules->pointNeigh[i][j]][1]);
-            }
-        }
-
-    }
+    drawBoard(&p);
     for (int i = 0; i < pData->pBoard->vectPoint.size(); i++){
         if (pData->pBoard->vectPoint.value(i)->isEmpty()==false){
             qDebug() << "[GameOutput::paintEvent] The " << pData->pBoard->vectPoint.value(i) << " is not empty !" << endl;
@@ -32,16 +21,13 @@ void GameOutput::paintEvent(QPaintEvent *event)
 
 void GameOutput::drawBoard(QPainter* p)
 {
-       for (int i = 0; i < pData->pBoard->vectPoint.size(); i++){
+       for (int i = 0; i < 24; i++){
            for (int j = 0; j < 4; j++){
-               if (pData->pRules->pointNeigh[i][j]>=0){
+               if (pData->pRules->pointNeigh[i][j]!=-1){
                    p->drawLine(pData->pRules->pointTab[i][0],pData->pRules->pointTab[i][1],pData->pRules->pointTab[pData->pRules->pointNeigh[i][j]][0],pData->pRules->pointTab[pData->pRules->pointNeigh[i][j]][1]);
                }
            }
-
        }
-
-
 }
 
 void GameOutput::changed()
