@@ -16,15 +16,14 @@ void GameController::initRelations(GameData *d)
 
 void GameController::onMove(QString source, QString destination)
 {
-    int src = source.toInt();
-    int dest = destination.toInt();
-    qDebug() << "[onMove] Source : " <<src<< " , Destination : " << dest << endl;
-
+    qDebug() << "[onMove] Source : " <<source.toInt()<< " , Destination : " << destination.toInt() << endl;
+    pData->movePawn(source.toInt(),destination.toInt());
 }
 
 void GameController::onEat(QString target)
 {
     qDebug() << "[onEat] Target : " <<target<< endl;
+    pData->removePawn(target.toInt());
 }
 
 void GameController::onPlace(QString target)

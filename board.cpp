@@ -7,8 +7,8 @@ Board::Board()
 
 void Board::setRelation(int pointsPos[][2])
 {
-    for (int i = 0; i < 2; i++){
-        vectPoint.append(new Point(i, pointsPos[0][i], pointsPos[1][i]));
+    for (int i = 0; i < 26; i++){
+        vectPoint.append(new Point(i, pointsPos[i][0], pointsPos[i][1]));
     }
 
 

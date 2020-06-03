@@ -13,6 +13,8 @@ public:
     void subscribe(Observer* obs);
     void notifyAll();
     void placePawn(int pos);
+    void removePawn(int pos);
+    void movePawn(int src, int dest);
     Board* pBoard;
     Rules* pRules;
 private:
