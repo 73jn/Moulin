@@ -6,6 +6,7 @@ class Pawn
 {
 public:
     Pawn();
+
 };
 
 #endif // PAWN_H

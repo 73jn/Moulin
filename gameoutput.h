@@ -5,6 +5,8 @@
 #include <QVector>
 #include "view.h"
 
+#define PAWNSIZE 20
+
 class GameOutput : public View
 {
     Q_OBJECT
