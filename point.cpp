@@ -17,3 +17,12 @@ bool Point::isEmpty()
         return false;
     }
 }
+
+void Point::setNeighbour(Point *p1, Point *p2, Point *p3, Point *p4)
+{
+    hisNeighbour = new Point*[4];
+    hisNeighbour[0]=p1;
+    hisNeighbour[1]=p2;
+    hisNeighbour[2]=p3;
+    hisNeighbour[3]=p4;
+}
