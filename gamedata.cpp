@@ -88,7 +88,10 @@ bool GameData::movePawn(int src, int dest)
                             break;
                         }
                     }
-                    if (isNeighbour){
+                    if (isNeighbour || isFlyingMode()){
+                        if (isAMill(src)){
+                            delMill(src);
+                        }
                         qDebug() << "Del Pawn" << endl;
                         pBoard->vectPoint.value(j)->pPawn=pBoard->vectPoint.value(i)->pPawn;
                         pBoard->vectPoint.value(i)->pPawn = nullptr;
@@ -160,6 +163,24 @@ bool GameData::noMorePawnToPlace()
     return false;
 }
 
+bool GameData::isFlyingMode()
+{
+    int pawnCount=0;
+    for (int i = 0; i < pBoard->vectPoint.size(); i++){
+        if (!pBoard->vectPoint.at(i)->isEmpty()){
+            if (pBoard->vectPoint.at(i)->pPawn->colorPawn == pActualPlayer->getColorTeam()){
+                pawnCount++;
+            }
+        }
+    }
+    if (pawnCount==3){
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 bool GameData::isAMill(int target)
 {
     for (int i = 0; i < pBoard->vectMillOnBoardPos.size(); i++){
@@ -171,4 +192,17 @@ bool GameData::isAMill(int target)
         }
     }
     return false;
+}
+
+void GameData::delMill(int target)
+{
+    for (int i = 0; i < pBoard->vectMillOnBoardPos.size(); i++){
+        if (pRules->mill[pBoard->vectMillOnBoardPos.at(i)][0] == target ||
+                pRules->mill[pBoard->vectMillOnBoardPos.at(i)][1] == target ||
+                pRules->mill[pBoard->vectMillOnBoardPos.at(i)][2] == target)
+        {
+            pBoard->vectMillOnBoardPos.remove(i);
+            return;
+        }
+    }
 }

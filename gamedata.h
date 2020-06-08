@@ -19,6 +19,7 @@ public:
     void changeActualPlayer();
     bool checkNewMill();
     bool noMorePawnToPlace();
+    bool isFlyingMode();
     HumanPlayer* pHuman1;
     HumanPlayer* pHuman2;
     Player* pActualPlayer = pHuman1;
@@ -29,5 +30,6 @@ private:
     Observer** observers;
     int obsCnt;
     bool isAMill(int target);
+    void delMill(int target);
 };
 #endif // GAMEDATA_H
