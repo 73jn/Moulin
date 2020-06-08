@@ -18,6 +18,7 @@ GameData::GameData()
     pHuman1 = new HumanPlayer(RED);
     pHuman2 = new HumanPlayer(BLUE);
     pActualPlayer = pHuman1;
+    pWaitingPlayer = pHuman2;
 }
 
 void GameData::subscribe(Observer *obs)
@@ -43,13 +44,12 @@ void GameData::notifyAll()
 bool GameData::placePawn(int pos)
 {
     for (int i = 0; i < pBoard->vectPoint.size(); i++){
-        qDebug() << "i : " << i << ", number : " << pBoard->vectPoint.value(i)->number << " , isEmpty : " << pBoard->vectPoint.value(i)->isEmpty() << endl;
+        //qDebug() << "i : " << i << ", number : " << pBoard->vectPoint.value(i)->number << " , isEmpty : " << pBoard->vectPoint.value(i)->isEmpty() << endl;
         if (pBoard->vectPoint.value(i)->number == pos && pBoard->vectPoint.value(i)->isEmpty()==true){
             qDebug() << "Create A Pawn" << endl;
             (pBoard->vectPoint.value(i)->pPawn) = new Pawn(pActualPlayer->getColorTeam());
+            pActualPlayer->removeAPawn();
             notifyAll();
-            checkNewMill();
-            changeActualPlayer();
             return true;
         }
     }
@@ -93,7 +93,6 @@ bool GameData::movePawn(int src, int dest)
                         pBoard->vectPoint.value(j)->pPawn=pBoard->vectPoint.value(i)->pPawn;
                         pBoard->vectPoint.value(i)->pPawn = nullptr;
                         notifyAll();
-                        pActualPlayer->removeAPawn();
                         return true;
                     }
 
@@ -108,9 +107,11 @@ void GameData::changeActualPlayer()
 {
     if (pActualPlayer == pHuman1){
         pActualPlayer = pHuman2;
+        pWaitingPlayer = pHuman1;
     }
     else if (pActualPlayer == pHuman2){
         pActualPlayer = pHuman1;
+        pWaitingPlayer = pHuman2;
     }
 }
 
@@ -129,9 +130,13 @@ bool GameData::checkNewMill()
                     }
                             if (!pBoard->vectPoint.at(i)->isEmpty() && !pBoard->vectPoint.at(j)->isEmpty() &&
                                     !pBoard->vectPoint.at(k)->isEmpty() && !alreadyAMill){
-                                if (pBoard->vectPoint.at(i)->pPawn->colorPawn==pActualPlayer->getColorTeam() &&
+                                if (((pBoard->vectPoint.at(i)->pPawn->colorPawn==pActualPlayer->getColorTeam() &&
                                         pBoard->vectPoint.at(j)->pPawn->colorPawn==pActualPlayer->getColorTeam() &&
-                                        pBoard->vectPoint.at(k)->pPawn->colorPawn==pActualPlayer->getColorTeam() &&
+                                        pBoard->vectPoint.at(k)->pPawn->colorPawn==pActualPlayer->getColorTeam()) ||
+                                        (pBoard->vectPoint.at(i)->pPawn->colorPawn==pWaitingPlayer->getColorTeam() &&
+                                         pBoard->vectPoint.at(j)->pPawn->colorPawn==pWaitingPlayer->getColorTeam() &&
+                                         pBoard->vectPoint.at(k)->pPawn->colorPawn==pWaitingPlayer->getColorTeam()))
+                                        &&
                                         pBoard->vectPoint.at(i)->number == pRules->mill[l][0] &&
                                         pBoard->vectPoint.at(j)->number == pRules->mill[l][1] &&
                                         pBoard->vectPoint.at(k)->number == pRules->mill[l][2])
@@ -145,6 +150,14 @@ bool GameData::checkNewMill()
             }
         }
     }
+}
+
+bool GameData::noMorePawnToPlace()
+{
+    if (pActualPlayer->getPawnNumber() == 0 && pWaitingPlayer->getPawnNumber() == 0){
+        return true;
+    }
+    return false;
 }
 
 bool GameData::isAMill(int target)

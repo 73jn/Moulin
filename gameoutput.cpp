@@ -14,7 +14,13 @@ void GameOutput::paintEvent(QPaintEvent *event)
     drawBoard(&p);
     for (int i = 0; i < pData->pBoard->vectPoint.size(); i++){
         if (pData->pBoard->vectPoint.value(i)->isEmpty()==false){
-            qDebug() << "[GameOutput::paintEvent] The " << pData->pBoard->vectPoint.value(i) << " is not empty !" << endl;
+            //qDebug() << "[GameOutput::paintEvent] The " << pData->pBoard->vectPoint.value(i) << " is not empty !" << endl;
+            if (pData->pBoard->vectPoint.value(i)->pPawn->colorPawn==RED){
+                p.setBrush(Qt::red);
+            }
+            else {
+                p.setBrush(Qt::blue);
+            }
             p.drawEllipse(pData->pBoard->vectPoint.value(i)->posX-(PAWNSIZE/2), pData->pBoard->vectPoint.value(i)->posY-(PAWNSIZE/2), PAWNSIZE, PAWNSIZE);
         }
     }

@@ -18,9 +18,11 @@ public:
     bool movePawn(int src, int dest);
     void changeActualPlayer();
     bool checkNewMill();
+    bool noMorePawnToPlace();
     HumanPlayer* pHuman1;
     HumanPlayer* pHuman2;
     Player* pActualPlayer = pHuman1;
+    Player* pWaitingPlayer;
     Board* pBoard;
     Rules* pRules;
 private:
