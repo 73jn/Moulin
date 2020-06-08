@@ -59,7 +59,7 @@ bool GameData::placePawn(int pos)
 bool GameData::removePawn(int pos)
 {
     for (int i = 0; i < pBoard->vectPoint.size(); i++){
-        if (pBoard->vectPoint.value(i)->number == pos && pBoard->vectPoint.value(i)->isEmpty()==false && !isAMill(pos)){
+        if (pBoard->vectPoint.value(i)->number == pos && pBoard->vectPoint.value(i)->isEmpty()==false && !isAMill(pos) && pBoard->vectPoint.at(i)->pPawn->colorPawn == pWaitingPlayer->getColorTeam()){
             qDebug() << "Del Pawn" << endl;
             delete((pBoard->vectPoint.value(i)->pPawn));
             (pBoard->vectPoint.value(i)->pPawn)=nullptr;
@@ -74,7 +74,7 @@ bool GameData::movePawn(int src, int dest)
 {
     bool isNeighbour = false;
     for (int i = 0; i < pBoard->vectPoint.size(); i++){
-        if (pBoard->vectPoint.value(i)->number == src && pBoard->vectPoint.value(i)->isEmpty()==false){
+        if (pBoard->vectPoint.value(i)->number == src && pBoard->vectPoint.value(i)->isEmpty()==false && pBoard->vectPoint.at(i)->pPawn->colorPawn == pActualPlayer->getColorTeam()){
             qDebug() << "Move Pawn" << endl;
             for (int j = 0; j < pBoard->vectPoint.size(); j++){
                 if (pBoard->vectPoint.value(j)->number == dest && pBoard->vectPoint.value(j)->isEmpty()==true){

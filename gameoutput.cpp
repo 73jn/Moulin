@@ -24,6 +24,7 @@ void GameOutput::paintEvent(QPaintEvent *event)
             p.drawEllipse(pData->pBoard->vectPoint.value(i)->posX-(PAWNSIZE/2), pData->pBoard->vectPoint.value(i)->posY-(PAWNSIZE/2), PAWNSIZE, PAWNSIZE);
         }
     }
+    drawNumber(&p);
 }
 
 void GameOutput::drawBoard(QPainter* p)
@@ -35,6 +36,13 @@ void GameOutput::drawBoard(QPainter* p)
                }
            }
        }
+}
+
+void GameOutput::drawNumber(QPainter *p)
+{
+    for (int i = 0; i < MAXPOINTS; i++){
+        p->drawText(pData->pRules->pointTab[i][0], pData->pRules->pointTab[i][1], QString::number(i));
+    }
 }
 
 void GameOutput::changed()

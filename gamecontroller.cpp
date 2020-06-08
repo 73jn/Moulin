@@ -90,6 +90,7 @@ void GameController::onAction(SigIdentifier SI, int target, int destination)
                 }
                 else {
                     state = MOVING;
+                    pData->changeActualPlayer();
                     qDebug() << "ENTER IN MOVING MODE";
                 }
             }

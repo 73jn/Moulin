@@ -15,6 +15,7 @@ public:
     GameOutput(int x, int y, int width, int heigth, QString title);
     void paintEvent(QPaintEvent* event);
     void drawBoard(QPainter *p);
+    void drawNumber(QPainter *p);
 protected:
     void changed();
 
