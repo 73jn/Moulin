@@ -4,6 +4,7 @@
 #include "board.h"
 #include "player.h"
 #include "observer.h"
+#include "humanplayer.h"
 #include <QPainter>
 #include <QWidget>
 class GameData
@@ -12,13 +13,19 @@ public:
     GameData();
     void subscribe(Observer* obs);
     void notifyAll();
-    void placePawn(int pos);
-    void removePawn(int pos);
-    void movePawn(int src, int dest);
+    bool placePawn(int pos);
+    bool removePawn(int pos);
+    bool movePawn(int src, int dest);
+    void changeActualPlayer();
+    bool checkNewMill();
+    HumanPlayer* pHuman1;
+    HumanPlayer* pHuman2;
+    Player* pActualPlayer = pHuman1;
     Board* pBoard;
     Rules* pRules;
 private:
     Observer** observers;
     int obsCnt;
+    bool isAMill(int target);
 };
 #endif // GAMEDATA_H

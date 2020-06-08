@@ -1,6 +1,7 @@
 #include "humanplayer.h"
 
-HumanPlayer::HumanPlayer()
+HumanPlayer::HumanPlayer(Color colorTeam)
+    : Player(colorTeam)
 {
 
 }

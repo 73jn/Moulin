@@ -33,6 +33,7 @@ SOURCES += \
 
 HEADERS += \
     board.h \
+    color.h \
     config.h \
     factory.h \
     gamecontroller.h \

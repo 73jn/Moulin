@@ -15,8 +15,6 @@ public:
 
     bool isEmpty();
     void setNeighbour(Point* p1, Point* p2, Point* p3, Point* p4);
-    void setNeighbour(Point* p1, Point* p2, Point* p3);
-    void setNeighbour(Point* p1, Point* p2);
 
 };
 

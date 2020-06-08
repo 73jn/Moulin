@@ -9,6 +9,7 @@ class Board
 public:
     Board();
     QVector<Point*> vectPoint;
+    QVector<int> vectMillOnBoardPos;
     void setRelation(int relation[][2], int pointNeigh[][4]);
 };
 

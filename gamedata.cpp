@@ -15,6 +15,9 @@ GameData::GameData()
     pBoard = new Board();
     pRules = new Rules();
     pBoard->setRelation(pRules->pointTab, pRules->pointNeigh);
+    pHuman1 = new HumanPlayer(RED);
+    pHuman2 = new HumanPlayer(BLUE);
+    pActualPlayer = pHuman1;
 }
 
 void GameData::subscribe(Observer *obs)
@@ -37,31 +40,37 @@ void GameData::notifyAll()
     }
 }
 
-void GameData::placePawn(int pos)
+bool GameData::placePawn(int pos)
 {
     for (int i = 0; i < pBoard->vectPoint.size(); i++){
         qDebug() << "i : " << i << ", number : " << pBoard->vectPoint.value(i)->number << " , isEmpty : " << pBoard->vectPoint.value(i)->isEmpty() << endl;
         if (pBoard->vectPoint.value(i)->number == pos && pBoard->vectPoint.value(i)->isEmpty()==true){
             qDebug() << "Create A Pawn" << endl;
-            (pBoard->vectPoint.value(i)->pPawn) = new Pawn();
+            (pBoard->vectPoint.value(i)->pPawn) = new Pawn(pActualPlayer->getColorTeam());
             notifyAll();
+            checkNewMill();
+            changeActualPlayer();
+            return true;
         }
     }
+    return false;
 }
 
-void GameData::removePawn(int pos)
+bool GameData::removePawn(int pos)
 {
     for (int i = 0; i < pBoard->vectPoint.size(); i++){
-        if (pBoard->vectPoint.value(i)->number == pos && pBoard->vectPoint.value(i)->isEmpty()==false){
+        if (pBoard->vectPoint.value(i)->number == pos && pBoard->vectPoint.value(i)->isEmpty()==false && !isAMill(pos)){
             qDebug() << "Del Pawn" << endl;
             delete((pBoard->vectPoint.value(i)->pPawn));
             (pBoard->vectPoint.value(i)->pPawn)=nullptr;
             notifyAll();
+            return true;
         }
     }
+    return false;
 }
 
-void GameData::movePawn(int src, int dest)
+bool GameData::movePawn(int src, int dest)
 {
     bool isNeighbour = false;
     for (int i = 0; i < pBoard->vectPoint.size(); i++){
@@ -84,10 +93,69 @@ void GameData::movePawn(int src, int dest)
                         pBoard->vectPoint.value(j)->pPawn=pBoard->vectPoint.value(i)->pPawn;
                         pBoard->vectPoint.value(i)->pPawn = nullptr;
                         notifyAll();
+                        pActualPlayer->removeAPawn();
+                        return true;
                     }
 
                 }
             }
         }
     }
+    return false;
+}
+
+void GameData::changeActualPlayer()
+{
+    if (pActualPlayer == pHuman1){
+        pActualPlayer = pHuman2;
+    }
+    else if (pActualPlayer == pHuman2){
+        pActualPlayer = pHuman1;
+    }
+}
+
+bool GameData::checkNewMill()
+{
+    bool alreadyAMill = false;
+    for (int i = 0; i < pBoard->vectPoint.size(); i++){
+        for (int j = 0; j < pBoard->vectPoint.size(); j++){
+            for (int k = 0; k < pBoard->vectPoint.size(); k++){
+                for (int l = 0; l < MAXMILL; l++){
+                    alreadyAMill = false;
+                    for (int m = 0; m < pBoard->vectMillOnBoardPos.size(); m++){
+                        if (pBoard->vectMillOnBoardPos.at(m)==l){
+                            alreadyAMill = true;
+                        }
+                    }
+                            if (!pBoard->vectPoint.at(i)->isEmpty() && !pBoard->vectPoint.at(j)->isEmpty() &&
+                                    !pBoard->vectPoint.at(k)->isEmpty() && !alreadyAMill){
+                                if (pBoard->vectPoint.at(i)->pPawn->colorPawn==pActualPlayer->getColorTeam() &&
+                                        pBoard->vectPoint.at(j)->pPawn->colorPawn==pActualPlayer->getColorTeam() &&
+                                        pBoard->vectPoint.at(k)->pPawn->colorPawn==pActualPlayer->getColorTeam() &&
+                                        pBoard->vectPoint.at(i)->number == pRules->mill[l][0] &&
+                                        pBoard->vectPoint.at(j)->number == pRules->mill[l][1] &&
+                                        pBoard->vectPoint.at(k)->number == pRules->mill[l][2])
+                                {
+                                    qDebug() << "MILL DETECTED !!!!!!!!!!!!!!!!!!!!";
+                                    pBoard->vectMillOnBoardPos.append(l);
+                                    return true;
+                                }
+                            }
+                }
+            }
+        }
+    }
+}
+
+bool GameData::isAMill(int target)
+{
+    for (int i = 0; i < pBoard->vectMillOnBoardPos.size(); i++){
+        if (pRules->mill[pBoard->vectMillOnBoardPos.at(i)][0] == target ||
+                pRules->mill[pBoard->vectMillOnBoardPos.at(i)][1] == target ||
+                pRules->mill[pBoard->vectMillOnBoardPos.at(i)][2] == target)
+        {
+            return true;
+        }
+    }
+    return false;
 }

@@ -1,11 +1,11 @@
 #ifndef HUMANPLAYER_H
 #define HUMANPLAYER_H
+#include "player.h"
 
-
-class HumanPlayer
+class HumanPlayer : public Player
 {
 public:
-    HumanPlayer();
+    HumanPlayer(Color colorTeam);
 };
 
 #endif // HUMANPLAYER_H

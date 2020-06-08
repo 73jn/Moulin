@@ -1,6 +1,6 @@
 #include "pawn.h"
 
-Pawn::Pawn()
+Pawn::Pawn(Color colorPawn)
 {
-
+    this->colorPawn = colorPawn;
 }
