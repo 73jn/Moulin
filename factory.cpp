@@ -10,9 +10,9 @@ Factory::Factory()
     {
         QString t;
         t.sprintf("Outputview #%d",i);
-        v1[i] = new GameOutput(100+i*50,100+i*50,400,300,t);
+        v1[i] = new GameOutput(100+i*50,100+i*50,500,500,t);
     }
-    v2 = new GameInput(100,450,400,50,"Command Window");
+    v2 = new GameInput(100,450,400,300,"Command Window");
 }
 
 Factory::~Factory()

@@ -1,7 +1,7 @@
 #ifndef POINT_H
 #define POINT_H
 #include "pawn.h"
-
+#include <QVector>
 class Point
 {
 public:
@@ -11,7 +11,7 @@ public:
     int posY;
     Pawn* pPawn=nullptr;
     bool isEdge;
-    Point** hisNeighbour=nullptr;
+    QVector<Point*> vectHisNeighbour;
 
     bool isEmpty();
     void setNeighbour(Point* p1, Point* p2, Point* p3, Point* p4);

@@ -59,7 +59,8 @@ bool GameData::placePawn(int pos)
 bool GameData::removePawn(int pos)
 {
     for (int i = 0; i < pBoard->vectPoint.size(); i++){
-        if (pBoard->vectPoint.value(i)->number == pos && pBoard->vectPoint.value(i)->isEmpty()==false && !isAMill(pos) && pBoard->vectPoint.at(i)->pPawn->colorPawn == pWaitingPlayer->getColorTeam()){
+        if (pBoard->vectPoint.value(i)->number == pos && pBoard->vectPoint.value(i)->isEmpty()==false && !isAMill(pos) &&
+                pBoard->vectPoint.at(i)->pPawn->colorPawn == pWaitingPlayer->getColorTeam()){
             qDebug() << "Del Pawn" << endl;
             delete((pBoard->vectPoint.value(i)->pPawn));
             (pBoard->vectPoint.value(i)->pPawn)=nullptr;
@@ -83,7 +84,7 @@ bool GameData::movePawn(int src, int dest)
                     //This part check if the dest is a neighbour of the source
                     //If not, isNeighbour will be false and we would'nt change the pawn position
                     for (int k = 0; k < 4; k++){
-                        if((pBoard->vectPoint.at(i)->hisNeighbour[k]==pBoard->vectPoint.at(j))&&pBoard->vectPoint.at(i)->hisNeighbour[k]!=nullptr){
+                        if((pBoard->vectPoint.at(i)->vectHisNeighbour.at(k)==pBoard->vectPoint.at(j))&&pBoard->vectPoint.at(i)->vectHisNeighbour.at(k)!=nullptr){
                             isNeighbour = true;
                             break;
                         }
@@ -165,20 +166,64 @@ bool GameData::noMorePawnToPlace()
 
 bool GameData::isFlyingMode()
 {
-    int pawnCount=0;
-    for (int i = 0; i < pBoard->vectPoint.size(); i++){
-        if (!pBoard->vectPoint.at(i)->isEmpty()){
-            if (pBoard->vectPoint.at(i)->pPawn->colorPawn == pActualPlayer->getColorTeam()){
-                pawnCount++;
-            }
-        }
-    }
-    if (pawnCount==3){
+    if (numberPlayerPawnOnBoard(pActualPlayer)==3){
         return true;
     }
     else {
         return false;
     }
+}
+
+Color GameData::actualPlayerColor()
+{
+    return pActualPlayer->getColorTeam();
+}
+
+bool GameData::checkEndGame()
+{
+    if (numberPlayerPawnOnBoard(pActualPlayer)<3||isStuck(pActualPlayer)){
+        pWinner = pWaitingPlayer;
+        return true;
+    } else if (isStuck(pWaitingPlayer)){
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool GameData::isStuck(Player * pPlayer)
+{
+    if (isFlyingMode()){
+        return false;
+    }
+    for (int i = 0; i < pBoard->vectPoint.size(); i++){
+        if (!pBoard->vectPoint.at(i)->isEmpty()){
+            if (pBoard->vectPoint.at(i)->pPawn->colorPawn == pPlayer->getColorTeam()){
+                for (int j = 0; j < 4; j++){
+                     if(pBoard->vectPoint.at(i)->vectHisNeighbour.at(j) != nullptr){
+                         if (pBoard->vectPoint.at(i)->vectHisNeighbour.at(j)->isEmpty()){
+                             return false;
+                         }
+                     }
+                }
+            }
+        }
+    }
+    return true;
+}
+
+int GameData::numberPlayerPawnOnBoard(Player *pPlayer)
+{
+    int pawnCount=0;
+    for (int i = 0; i < pBoard->vectPoint.size(); i++){
+        if (!pBoard->vectPoint.at(i)->isEmpty()){
+            if (pBoard->vectPoint.at(i)->pPawn->colorPawn == pPlayer->getColorTeam()){
+                pawnCount++;
+            }
+        }
+    }
+    return pawnCount;
 }
 
 bool GameData::isAMill(int target)
@@ -206,3 +251,5 @@ void GameData::delMill(int target)
         }
     }
 }
+//AJOUTER BLOCAGE DE TOUS LES PAWNS
+//QUAND L'AUTRE A FULL MOULIN, ON PEUT LUI MANGER LE MOULIN SI JE FERME UN MOULIN

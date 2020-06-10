@@ -20,13 +20,18 @@ public:
     bool checkNewMill();
     bool noMorePawnToPlace();
     bool isFlyingMode();
+    Color actualPlayerColor();
+    bool checkEndGame();
+    bool isStuck(Player* pPlayer);
     HumanPlayer* pHuman1;
     HumanPlayer* pHuman2;
     Player* pActualPlayer = pHuman1;
     Player* pWaitingPlayer;
+    Player* pWinner;
     Board* pBoard;
     Rules* pRules;
 private:
+    int numberPlayerPawnOnBoard(Player * pPlayer);
     Observer** observers;
     int obsCnt;
     bool isAMill(int target);

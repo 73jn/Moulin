@@ -42,6 +42,11 @@ void GameController::onPlace(QString target)
     onAction(PLACESIG, target.toInt(), UNUSED);
 }
 
+GameController::State GameController::getState()
+{
+    return state;
+}
+
 void GameController::onAction(SigIdentifier SI, int target, int destination)
 {
     switch (state){
@@ -83,6 +88,9 @@ void GameController::onAction(SigIdentifier SI, int target, int destination)
         break;
     case MOVING:
         if (SI == MOVESIG){
+            if (pData->checkEndGame()){
+                state = END;
+            }
             if(pData->movePawn(target, destination)){
                 if(pData->checkNewMill()){
                     state = EATING;
@@ -95,6 +103,8 @@ void GameController::onAction(SigIdentifier SI, int target, int destination)
                 }
             }
         }
+        break;
+    case END:
         break;
     }
 }

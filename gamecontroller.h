@@ -14,6 +14,7 @@ public:
     void onMove(QString source, QString destination);
     void onEat(QString target);
     void onPlace(QString target);
+    State getState();
 private:
     GameData* pData;
     State state = PLACING;
