@@ -83,13 +83,13 @@ bool GameData::movePawn(int src, int dest)
 
                     //This part check if the dest is a neighbour of the source
                     //If not, isNeighbour will be false and we would'nt change the pawn position
-                    for (int k = 0; k < 4; k++){
+                    for (int k = 0; k < pBoard->vectPoint.at(i)->vectHisNeighbour.size(); k++){
                         if((pBoard->vectPoint.at(i)->vectHisNeighbour.at(k)==pBoard->vectPoint.at(j))&&pBoard->vectPoint.at(i)->vectHisNeighbour.at(k)!=nullptr){
                             isNeighbour = true;
                             break;
                         }
                     }
-                    if (isNeighbour || isFlyingMode()){
+                    if (isNeighbour || isFlyingMode(pActualPlayer)){
                         if (isAMill(src)){
                             delMill(src);
                         }
@@ -164,9 +164,9 @@ bool GameData::noMorePawnToPlace()
     return false;
 }
 
-bool GameData::isFlyingMode()
+bool GameData::isFlyingMode(Player* pPlayer)
 {
-    if (numberPlayerPawnOnBoard(pActualPlayer)==3){
+    if (numberPlayerPawnOnBoard(pPlayer)==3){
         return true;
     }
     else {
@@ -180,37 +180,51 @@ Color GameData::actualPlayerColor()
 }
 
 bool GameData::checkEndGame()
-{
-    if (numberPlayerPawnOnBoard(pActualPlayer)<3||isStuck(pActualPlayer)){
-        pWinner = pWaitingPlayer;
-        return true;
-    } else if (isStuck(pWaitingPlayer)){
-        return true;
+{   if (!noMorePawnToPlace()){
+        return false;
     }
     else {
-        return false;
+        if (numberPlayerPawnOnBoard(pActualPlayer)<3||isStuck(pActualPlayer)){
+            pWinner = pWaitingPlayer;
+            notifyAll();
+            return true;
+        } else if (numberPlayerPawnOnBoard(pWaitingPlayer)<3||isStuck(pWaitingPlayer)){
+            pWinner = pActualPlayer;
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
 
 bool GameData::isStuck(Player * pPlayer)
 {
-    if (isFlyingMode()){
+    if (isFlyingMode(pPlayer)){
         return false;
     }
     for (int i = 0; i < pBoard->vectPoint.size(); i++){
         if (!pBoard->vectPoint.at(i)->isEmpty()){
             if (pBoard->vectPoint.at(i)->pPawn->colorPawn == pPlayer->getColorTeam()){
-                for (int j = 0; j < 4; j++){
-                     if(pBoard->vectPoint.at(i)->vectHisNeighbour.at(j) != nullptr){
+                for (int j = 0; j < pBoard->vectPoint.at(i)->vectHisNeighbour.size(); j++){
                          if (pBoard->vectPoint.at(i)->vectHisNeighbour.at(j)->isEmpty()){
                              return false;
                          }
-                     }
                 }
             }
         }
     }
     return true;
+}
+
+int GameData::getRemainPawnToPlace(Color color)
+{
+    if (color == Color::RED){
+        return pHuman1->getPawnNumber();
+    }
+    else {
+        return pHuman2->getPawnNumber();
+    }
 }
 
 int GameData::numberPlayerPawnOnBoard(Player *pPlayer)

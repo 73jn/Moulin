@@ -19,10 +19,11 @@ public:
     void changeActualPlayer();
     bool checkNewMill();
     bool noMorePawnToPlace();
-    bool isFlyingMode();
+    bool isFlyingMode(Player* pPlayer);
     Color actualPlayerColor();
     bool checkEndGame();
     bool isStuck(Player* pPlayer);
+    int getRemainPawnToPlace(Color color);
     HumanPlayer* pHuman1;
     HumanPlayer* pHuman2;
     Player* pActualPlayer = pHuman1;

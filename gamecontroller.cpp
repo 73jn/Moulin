@@ -42,6 +42,11 @@ void GameController::onPlace(QString target)
     onAction(PLACESIG, target.toInt(), UNUSED);
 }
 
+void GameController::onBtnPlay()
+{
+    onAction(PLAYSIG, UNUSED, UNUSED);
+}
+
 GameController::State GameController::getState()
 {
     return state;
@@ -60,6 +65,10 @@ void GameController::onAction(SigIdentifier SI, int target, int destination)
                 else {
                     pData->changeActualPlayer();
                     if (pData->noMorePawnToPlace()){
+                        if (pData->checkEndGame()){
+                            state = END;
+                            break;
+                        }
                         state = MOVING;
                         qDebug() << "ENTER IN MOVING MODE";
                     }
@@ -74,6 +83,10 @@ void GameController::onAction(SigIdentifier SI, int target, int destination)
     case EATING:
         if (SI == EATSIG){
             if (pData->removePawn(target)){
+                if (pData->checkEndGame()){
+                    state = END;
+                    break;
+                }
                 pData->changeActualPlayer();
                 if (pData->noMorePawnToPlace()){
                     state = MOVING;
@@ -90,6 +103,7 @@ void GameController::onAction(SigIdentifier SI, int target, int destination)
         if (SI == MOVESIG){
             if (pData->checkEndGame()){
                 state = END;
+                break;
             }
             if(pData->movePawn(target, destination)){
                 if(pData->checkNewMill()){
@@ -105,6 +119,11 @@ void GameController::onAction(SigIdentifier SI, int target, int destination)
         }
         break;
     case END:
+        break;
+    case MENUPLAY:
+        if (SI == PLAYSIG){
+            state = PLACING;
+        }
         break;
     }
 }

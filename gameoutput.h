@@ -19,6 +19,7 @@ public:
     void drawBoard(QPainter *p);
     void drawNumber(QPainter *p);
     void drawLblInfos();
+    void drawPawn(QPainter *p);
 protected:
     void changed();
 

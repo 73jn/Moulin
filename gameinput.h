@@ -2,6 +2,8 @@
 #define GAMEINPUT_H
 
 #include <QLineEdit>
+#include <QPushButton>
+#include <QLabel>
 #include "view.h"
 class GameInput : public View
 {
@@ -18,6 +20,14 @@ private:
     QLineEdit* leMoveSource;
     QLineEdit* leMoveDest;
     QLineEdit* leEat;
+
+    QLabel* lblPlace;
+    QLabel* lblMoveSource;
+    QLabel* lblMoveDest;
+    QLabel* lblEat;
+
+    QPushButton* btnPlay;
+    QPushButton* btnTwoHumanPlayer;
 
 private slots:
     void onCommandEntered();

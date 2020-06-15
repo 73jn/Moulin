@@ -22,6 +22,10 @@ void Point::setNeighbour(Point *p1, Point *p2, Point *p3, Point *p4)
 {
     vectHisNeighbour.append(p1);
     vectHisNeighbour.append(p2);
-    vectHisNeighbour.append(p3);
-    vectHisNeighbour.append(p4);
+    if(p3!=nullptr){
+       vectHisNeighbour.append(p3);
+    }
+    if (p4!=nullptr){
+       vectHisNeighbour.append(p4);
+    }
 }
