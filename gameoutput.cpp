@@ -8,7 +8,7 @@ GameOutput::GameOutput(int x, int y, int width, int heigth, QString title)
 {
     lblInfo = new QLabel(this);
     lblInfo->show();
-    lblInfo->setGeometry(125,400,250,100);
+    lblInfo->setGeometry(200,400,250,100);
     lblInfo->setText("DEFAULT");
 }
 
@@ -102,11 +102,11 @@ void GameOutput::drawPawn(QPainter *p)
 
     for (int j = 0; j < pData->getRemainPawnToPlace(Color::RED); ++j) {
         p->setBrush(Qt::red);
-        p->drawEllipse(j*20+20,500,PAWNSIZE,PAWNSIZE);
+        p->drawEllipse(j*20+20,430,PAWNSIZE,PAWNSIZE);
     }
     for (int k = 0; k < pData->getRemainPawnToPlace(Color::BLUE); ++k) {
         p->setBrush(Qt::blue);
-        p->drawEllipse(k*20+20,550,PAWNSIZE,PAWNSIZE);
+        p->drawEllipse(k*20+20,460,PAWNSIZE,PAWNSIZE);
     }
 }
 

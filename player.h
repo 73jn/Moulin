@@ -10,7 +10,7 @@ public:
     int getPawnNumber();
     Color getColorTeam();
 private:
-    int numberOfPawn = 4;
+    int numberOfPawn = 8;
     Color colorTeam;
 };
 
