@@ -1,7 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include "color.h"
-
+#define NUMBERPAWN 8
 class Player
 {
 public:
@@ -9,8 +9,9 @@ public:
     void removeAPawn();
     int getPawnNumber();
     Color getColorTeam();
+    void resetPlayer();
 private:
-    int numberOfPawn = 8;
+    int numberOfPawn = NUMBERPAWN;
     Color colorTeam;
 };
 

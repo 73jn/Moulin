@@ -3,9 +3,9 @@
 #include "QDebug"
 #define MAXOBSERVERS 1
 
-GameData::GameData()
+GameData::GameData() : QObject()
 {
-    observers = new Observer*[MAXOBSERVERS];
+    observers = new Observer*[MAXOBSERVERS]; //Create a instance of observer
 
     for (int cnt=0; cnt<MAXOBSERVERS; cnt++)
     {
@@ -125,28 +125,28 @@ bool GameData::checkNewMill()
     for (int i = 0; i < pBoard->vectPoint.size(); i++){
         for (int j = 0; j < pBoard->vectPoint.size(); j++){
             for (int k = 0; k < pBoard->vectPoint.size(); k++){
-                for (int l = 0; l < MAXMILL; l++){
+                for (int l = 0; l < MAXMILL; l++){          //Check in vectMillOnBoardPos if it's already a memorized mill
                     alreadyAMill = false;
                     for (int m = 0; m < pBoard->vectMillOnBoardPos.size(); m++){
                         if (pBoard->vectMillOnBoardPos.at(m)==l){
                             alreadyAMill = true;
                         }
                     }
-                            if (!pBoard->vectPoint.at(i)->isEmpty() && !pBoard->vectPoint.at(j)->isEmpty() &&
+                            if (!pBoard->vectPoint.at(i)->isEmpty() && !pBoard->vectPoint.at(j)->isEmpty() && //Check if all points are'nt empty
                                     !pBoard->vectPoint.at(k)->isEmpty() && !alreadyAMill){
-                                if (((pBoard->vectPoint.at(i)->pPawn->colorPawn==pActualPlayer->getColorTeam() &&
+                                if (((pBoard->vectPoint.at(i)->pPawn->colorPawn==pActualPlayer->getColorTeam() && //Check if all pawn are the same color as the playingPlayer or waitingPlayer
                                         pBoard->vectPoint.at(j)->pPawn->colorPawn==pActualPlayer->getColorTeam() &&
                                         pBoard->vectPoint.at(k)->pPawn->colorPawn==pActualPlayer->getColorTeam()) ||
                                         (pBoard->vectPoint.at(i)->pPawn->colorPawn==pWaitingPlayer->getColorTeam() &&
                                          pBoard->vectPoint.at(j)->pPawn->colorPawn==pWaitingPlayer->getColorTeam() &&
                                          pBoard->vectPoint.at(k)->pPawn->colorPawn==pWaitingPlayer->getColorTeam()))
                                         &&
-                                        pBoard->vectPoint.at(i)->number == pRules->mill[l][0] &&
+                                        pBoard->vectPoint.at(i)->number == pRules->mill[l][0] &&    //Check if the points number are the same as the mill tab
                                         pBoard->vectPoint.at(j)->number == pRules->mill[l][1] &&
                                         pBoard->vectPoint.at(k)->number == pRules->mill[l][2])
                                 {
                                     qDebug() << "MILL DETECTED !!!!!!!!!!!!!!!!!!!!";
-                                    pBoard->vectMillOnBoardPos.append(l);
+                                    pBoard->vectMillOnBoardPos.append(l); //Save the position of the mill in the vector
                                     return true;
                                 }
                             }
@@ -187,9 +187,12 @@ bool GameData::checkEndGame()
         if (numberPlayerPawnOnBoard(pActualPlayer)<3||isStuck(pActualPlayer)){
             pWinner = pWaitingPlayer;
             notifyAll();
+            sigEndGame();
             return true;
         } else if (numberPlayerPawnOnBoard(pWaitingPlayer)<3||isStuck(pWaitingPlayer)){
             pWinner = pActualPlayer;
+            notifyAll();
+            sigEndGame();
             return true;
         }
         else {
@@ -225,6 +228,22 @@ int GameData::getRemainPawnToPlace(Color color)
     else {
         return pHuman2->getPawnNumber();
     }
+}
+
+void GameData::resetGame()
+{
+    for (int i = 0; i < pBoard->vectPoint.size(); i++){
+        if (!pBoard->vectPoint.at(i)->isEmpty()){
+            delete pBoard->vectPoint.at(i)->pPawn;
+            pBoard->vectPoint.at(i)->pPawn=nullptr;
+        }
+    }
+    for (int i = 0; i < pBoard->vectMillOnBoardPos.size(); i++){
+        pBoard->vectMillOnBoardPos.remove(i);
+    }
+    pActualPlayer->resetPlayer();
+    pWaitingPlayer->resetPlayer();
+    sigResetGame();
 }
 
 int GameData::numberPlayerPawnOnBoard(Player *pPlayer)

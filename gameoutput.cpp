@@ -9,7 +9,7 @@ GameOutput::GameOutput(int x, int y, int width, int heigth, QString title)
     lblInfo = new QLabel(this);
     lblInfo->show();
     lblInfo->setGeometry(200,400,250,100);
-    lblInfo->setText("DEFAULT");
+    lblInfo->setText("Press Play");
 }
 
 void GameOutput::paintEvent(QPaintEvent *event)

@@ -3,9 +3,10 @@
 
 #include "gamedata.h"
 #include <QString>
-
-class GameController
+#include <QObject>
+class GameController : public QObject
 {
+    Q_OBJECT
 public:
     enum SigIdentifier {PLACESIG, MOVESIG, EATSIG, PLAYSIG};
     enum State {PLACING, EATING, MOVING, END, MENUPLAY};
@@ -16,6 +17,10 @@ public:
     void onPlace(QString target);
     void onBtnPlay();
     State getState();
+    GameData *getData();
+private slots:
+    void onResetGame();
+
 private:
     GameData* pData;
     State state = MENUPLAY;

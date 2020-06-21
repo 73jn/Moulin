@@ -7,8 +7,10 @@
 #include "humanplayer.h"
 #include <QPainter>
 #include <QWidget>
-class GameData
+#include <QObject>
+class GameData : public QObject
 {
+    Q_OBJECT
 public:
     GameData();
     void subscribe(Observer* obs);
@@ -24,6 +26,7 @@ public:
     bool checkEndGame();
     bool isStuck(Player* pPlayer);
     int getRemainPawnToPlace(Color color);
+    void resetGame();
     HumanPlayer* pHuman1;
     HumanPlayer* pHuman2;
     Player* pActualPlayer = pHuman1;
@@ -31,6 +34,9 @@ public:
     Player* pWinner;
     Board* pBoard;
     Rules* pRules;
+signals:
+    void sigResetGame();
+    void sigEndGame();
 private:
     int numberPlayerPawnOnBoard(Player * pPlayer);
     Observer** observers;

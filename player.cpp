@@ -21,3 +21,8 @@ Color Player::getColorTeam()
 {
     return colorTeam;
 }
+
+void Player::resetPlayer()
+{
+    numberOfPawn = NUMBERPAWN;
+}

@@ -87,6 +87,22 @@ void GameInput::onCommandEntered()
         lblMoveSource->setVisible(true);
         lblMoveDest->setVisible(true);
         lblEat->setVisible(true);
+        connect(pController->getData(), SIGNAL(sigEndGame()), this, SLOT(onEndGame()));
     }
 
+}
+
+void GameInput::onEndGame()
+{
+    btnPlay->setVisible(true);
+
+    lePlace->setVisible(false);
+    leMoveSource->setVisible(false);
+    leMoveDest->setVisible(false);
+    leEat->setVisible(false);
+    lblPlace->setVisible(false);
+    lblMoveSource->setVisible(false);
+    lblMoveDest->setVisible(false);
+    lblEat->setVisible(false);
+    update();
 }
