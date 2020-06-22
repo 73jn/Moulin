@@ -5,6 +5,7 @@
 #include "config.h"
 #include <QObject>
 
+
 GameController::GameController() : QObject()
 {
     pData = 0;
@@ -15,8 +16,6 @@ void GameController::initRelations(GameData *d)
     pData = d;
     connect(pData, SIGNAL(sigResetGame()), this, SLOT(onResetGame()));
 }
-
-
 void GameController::onMove(QString source, QString destination)
 {
     onAction(MOVESIG, source.toInt(), destination.toInt());

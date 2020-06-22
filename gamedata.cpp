@@ -44,11 +44,10 @@ void GameData::notifyAll()
 bool GameData::placePawn(int pos)
 {
     for (int i = 0; i < pBoard->vectPoint.size(); i++){
-        //qDebug() << "i : " << i << ", number : " << pBoard->vectPoint.value(i)->number << " , isEmpty : " << pBoard->vectPoint.value(i)->isEmpty() << endl;
-        if (pBoard->vectPoint.value(i)->number == pos && pBoard->vectPoint.value(i)->isEmpty()==true){
+        if (pBoard->vectPoint.value(i)->number == pos && pBoard->vectPoint.value(i)->isEmpty()==true){ //If points empty and same pos
             qDebug() << "Create A Pawn" << endl;
             (pBoard->vectPoint.value(i)->pPawn) = new Pawn(pActualPlayer->getColorTeam());
-            pActualPlayer->removeAPawn();
+            pActualPlayer->removeAPawn(); //Remove a hand pawn to the current player
             notifyAll();
             return true;
         }
@@ -58,13 +57,13 @@ bool GameData::placePawn(int pos)
 
 bool GameData::removePawn(int pos)
 {
-    for (int i = 0; i < pBoard->vectPoint.size(); i++){
+    for (int i = 0; i < pBoard->vectPoint.size(); i++){ //Cross all the points
         if (pBoard->vectPoint.value(i)->number == pos && pBoard->vectPoint.value(i)->isEmpty()==false && !isAMill(pos) &&
                 pBoard->vectPoint.at(i)->pPawn->colorPawn == pWaitingPlayer->getColorTeam()){
             qDebug() << "Del Pawn" << endl;
-            delete((pBoard->vectPoint.value(i)->pPawn));
+            delete((pBoard->vectPoint.value(i)->pPawn)); //Delete the points
             (pBoard->vectPoint.value(i)->pPawn)=nullptr;
-            notifyAll();
+            notifyAll(); //Notify observers
             return true;
         }
     }
@@ -74,7 +73,7 @@ bool GameData::removePawn(int pos)
 bool GameData::movePawn(int src, int dest)
 {
     bool isNeighbour = false;
-    for (int i = 0; i < pBoard->vectPoint.size(); i++){
+    for (int i = 0; i < pBoard->vectPoint.size(); i++){ //Cross all the points
         if (pBoard->vectPoint.value(i)->number == src && pBoard->vectPoint.value(i)->isEmpty()==false && pBoard->vectPoint.at(i)->pPawn->colorPawn == pActualPlayer->getColorTeam()){
             qDebug() << "Move Pawn" << endl;
             for (int j = 0; j < pBoard->vectPoint.size(); j++){
@@ -89,13 +88,13 @@ bool GameData::movePawn(int src, int dest)
                             break;
                         }
                     }
-                    if (isNeighbour || isFlyingMode(pActualPlayer)){
-                        if (isAMill(src)){
+                    if (isNeighbour || isFlyingMode(pActualPlayer)){ //Bypass the neighbour rule is we're in flying mode
+                        if (isAMill(src)){ //If we open a mill, the mill is deleted
                             delMill(src);
                         }
                         qDebug() << "Del Pawn" << endl;
-                        pBoard->vectPoint.value(j)->pPawn=pBoard->vectPoint.value(i)->pPawn;
-                        pBoard->vectPoint.value(i)->pPawn = nullptr;
+                        pBoard->vectPoint.value(j)->pPawn=pBoard->vectPoint.value(i)->pPawn; //Move pawn
+                        pBoard->vectPoint.value(i)->pPawn = nullptr; //The source pawn point to nullptr
                         notifyAll();
                         return true;
                     }
@@ -122,14 +121,14 @@ void GameData::changeActualPlayer()
 bool GameData::checkNewMill()
 {
     bool alreadyAMill = false;
-    for (int i = 0; i < pBoard->vectPoint.size(); i++){
+    for (int i = 0; i < pBoard->vectPoint.size(); i++){ //3 for to cross all the possibilities
         for (int j = 0; j < pBoard->vectPoint.size(); j++){
             for (int k = 0; k < pBoard->vectPoint.size(); k++){
                 for (int l = 0; l < MAXMILL; l++){          //Check in vectMillOnBoardPos if it's already a memorized mill
                     alreadyAMill = false;
                     for (int m = 0; m < pBoard->vectMillOnBoardPos.size(); m++){
                         if (pBoard->vectMillOnBoardPos.at(m)==l){
-                            alreadyAMill = true;
+                            alreadyAMill = true; //If there is already a mill, we save a boolean value to true
                         }
                     }
                             if (!pBoard->vectPoint.at(i)->isEmpty() && !pBoard->vectPoint.at(j)->isEmpty() && //Check if all points are'nt empty
